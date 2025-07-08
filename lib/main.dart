@@ -1,7 +1,8 @@
-import 'package:buhoor/core/common/theme.dart';
+import 'package:buhoor/app/auth/common/auth_wrapper_view.dart';
+import 'package:buhoor/core/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:buhoor/app/home/home.dart';
+import 'package:buhoor/core/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,7 +11,7 @@ Future<void> main() async {
 }
 
 Future<void> _initializeApp() async {
-
+  Get.put(ThemeCtrl());
 }
 
 class MyApp extends StatelessWidget {
@@ -21,10 +22,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       themeMode: ThemeMode.system,
-      theme: MyTheme.myLightTheme,
-      darkTheme: MyTheme.myDarkTheme,
+      theme: MyTheme.lightTheme,
+      darkTheme: MyTheme.darkTheme,
       debugShowCheckedModeBanner: false,
-      home: HomeV(),
+      home: AuthWrapperView(),
     );
   }
 
