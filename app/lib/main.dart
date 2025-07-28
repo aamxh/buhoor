@@ -1,8 +1,8 @@
 import 'package:buhoor/app/auth/common/auth_wrapper_view.dart';
 import 'package:buhoor/core/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
-import 'package:buhoor/core/theme_controller.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +11,7 @@ Future<void> main() async {
 }
 
 Future<void> _initializeApp() async {
-  Get.put(ThemeCtrl());
+
 }
 
 class MyApp extends StatelessWidget {
@@ -21,10 +21,24 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      themeMode: ThemeMode.system,
-      theme: MyTheme.lightTheme,
-      darkTheme: MyTheme.darkTheme,
+      theme: lightTheme,
       debugShowCheckedModeBanner: false,
+      supportedLocales: [Locale('ar')],
+      locale: Locale('ar'),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      localeResolutionCallback: (locale, supportedLocales) {
+        for (var supportedLocale in supportedLocales) {
+          if (supportedLocale.languageCode == locale?.languageCode) {
+            return supportedLocale;
+          }
+        }
+        return supportedLocales.first;
+      },
+      title: "buhoor",
       home: AuthWrapperView(),
     );
   }
