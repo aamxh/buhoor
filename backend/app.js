@@ -2,12 +2,14 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const authRoutes = require('./auth/routes/routes');
-const poemsRoutes = require('./poems/routes/routes');
+const authRoutes = require('./auth/routes');
+const poemsRoutes = require('./poems/routes');
+const poetsRoutes = require('./poets/routes');
 
 app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/poems', poemsRoutes);
+app.use('/poets', poetsRoutes);
 const port = process.env.PORT;
 
 app.listen(port, () => {

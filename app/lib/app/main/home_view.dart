@@ -2,7 +2,7 @@ import 'package:buhoor/app/main/home_view_model.dart';
 import 'package:buhoor/app/main/search_view.dart';
 import 'package:buhoor/app/settings/settings_widget.dart';
 import 'package:buhoor/core/constants.dart';
-import 'package:buhoor/data.dart';
+import 'package:buhoor/core/data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

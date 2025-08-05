@@ -1,7 +1,7 @@
-const pool = require('../../config/pg_db');
+const pool = require('../config/pg_db');
 
-exports.getFilteredPoems = async (req, res) => {
-    
+async function getFilteredPoems(req, res) {
+ 
     const {era, poet, genre, meter} = req.query;
     
     const conditions = [];
@@ -9,19 +9,19 @@ exports.getFilteredPoems = async (req, res) => {
     
     if (era) {
       values.push(era);
-      conditions.push(`eras.name = $${values.length}`);
+      conditions.push(`eras.slug = $${values.length}`);
     }
     if (poet) {
       values.push(poet);
-      conditions.push(`poets.name = $${values.length}`);
+      conditions.push(`poets.slug = $${values.length}`);
     }
     if (genre) {
       values.push(genre);
-      conditions.push(`genres.name = $${values.length}`);
+      conditions.push(`themes.slug = $${values.length}`);
     }
     if (meter) {
       values.push(meter);
-      conditions.push(`meters.name = $${values.length}`);
+      conditions.push(`meters.slug = $${values.length}`);
     }
     
     const whereClause = conditions.length ? `WHERE ${conditions.join(' AND ')}` : '';
@@ -41,15 +41,20 @@ exports.getFilteredPoems = async (req, res) => {
     JOIN themes ON poems.theme_id = themes.id
     JOIN meters ON poems.meter_id = meters.id
     ${whereClause}
-    ORDER BY poems.id DESC
+    ORDER BY poems.id ASC
   `;
 
     try {
-        const result = await pool.query(query, values);
+        const result = await pool.query(`
+          SELECT *
+          FROM meters
+          `);
         res.status(200).json({'poems': result.rows});
     } catch(err) {
         console.error('Error executing query: ', err);
         res.status(500).json({'error': 'Internal server error!'});
     }
 
-};
+}
+
+exports.getFilteredPoems = getFilteredPoems;
