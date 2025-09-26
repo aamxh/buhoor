@@ -1,8 +1,14 @@
+import 'package:buhoor/app/common/api.dart';
+import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/eras/eras_view.dart';
+import 'package:buhoor/app/genres/genres_view.dart';
 import 'package:buhoor/app/main/home_view_model.dart';
+import 'package:buhoor/app/meters/meters_view.dart';
+import 'package:buhoor/app/poets/poets_view.dart';
+import 'package:buhoor/app/poets/poets_view_model.dart';
 import 'package:buhoor/app/search/search_view.dart';
 import 'package:buhoor/app/settings/settings_widget.dart';
 import 'package:buhoor/core/constants.dart';
-import 'package:buhoor/core/data.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,91 +28,50 @@ class HomeView extends StatelessWidget {
       drawer: SettingsWidget(),
       body: Column(
         children: [
-          Container(
-            color: MyConstants.primaryColor,
-            height: size.height * 0.05,
-          ),
-          Container(
-            color: MyConstants.primaryColor,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 20,),
-                    GestureDetector(
-                        onTap: () => _key.currentState!.openDrawer(),
-                        child: Icon(
-                          Icons.view_headline_outlined,
-                          size: 30,
-                          color: theme.scaffoldBackgroundColor,
-                        ),
-                      ),
-                  ],
-                ),
-                Image.asset(
-                  'assets/buhoor_no_bg.png',
-                  width: size.width * 0.2,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20),
-                  child: Icon(
-                      Icons.view_headline_outlined,
-                      size: 30,
-                      color: MyConstants.primaryColor,
-                    ),
-                ),
-              ],
-            ),
-          ),
+          AppBarWidget(drawerKey: _key),
+          SizedBox(height: size.height * 0.02,),
           SingleChildScrollView(
             padding: EdgeInsets.symmetric(horizontal: size.width * 0.08),
             child: Column(
               children: [
-                SizedBox(height: size.height * 0.04,),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () async {
+                        final poets = await MyApi.getPoetsByPage(1);
+                        Get.find<PoetsViewModel>().poets.assignAll(poets);
+                        Get.to(() => PoetsView());
+                      },
                       child: Text(
                         'الشعراء',
-                        style: theme.textTheme.titleLarge!.copyWith(
-                          color: MyConstants.primaryColor
-                        ),
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => Get.to(() => ErasView()),
                       child: Text(
                         'العصور',
-                        style: theme.textTheme.titleLarge!.copyWith(
-                          color: MyConstants.primaryColor
-                        ),
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => Get.to(() => MetersView()),
                       child: Text(
                         'البحور',
-                        style: theme.textTheme.titleLarge!.copyWith(
-                          color: MyConstants.primaryColor
-                        ),
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () => Get.to(() => GenresView()),
                       child: Text(
                         'الأغراض',
-                        style: theme.textTheme.titleMedium!.copyWith(
-                          color: MyConstants.primaryColor
-                        ),
+                        style: theme.textTheme.titleLarge,
                       ),
                     ),
                   ],
                 ),
-                SizedBox(height: size.height * 0.08,),
+                SizedBox(height: size.height * 0.04,),
                 Container(
                   padding: EdgeInsets.all(2),
                   decoration: BoxDecoration(
@@ -124,15 +89,10 @@ class HomeView extends StatelessWidget {
                             Get.to(() => SearchView());
                           }
                         },
-                        child: Obx(() =>
-                            Icon(
-                              Icons.search,
-                              size: 30,
-                              color:
-                              _vm.searchWord.isEmpty ?
-                              theme.colorScheme.secondary :
-                              theme.primaryColor,
-                            ),
+                        child: Icon(
+                          Icons.search,
+                          size: 30,
+                          color:theme.colorScheme.secondary,
                         ),
                       ),
                       const SizedBox(width: 10,),
@@ -148,6 +108,7 @@ class HomeView extends StatelessWidget {
                       Expanded(
                         child: TextField(
                           onChanged: (val) => _vm.searchWord.value = val,
+                          style: theme.textTheme.titleMedium,
                           decoration: InputDecoration(
                             border: InputBorder.none,
                           ),
@@ -160,7 +121,7 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: size.height  * 0.01,),
                 Text(
                   'ابحث عن شعر، أو عن شاعر، أو عن عصر..',
-                  style: theme.textTheme.titleMedium,
+                  style: theme.textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: size.height * 0.04,),
@@ -179,7 +140,7 @@ class HomeView extends StatelessWidget {
                         children: [
                           Text(
                             'random poem\'s title',
-                            style: theme.textTheme.titleSmall,
+                            style: theme.textTheme.titleMedium,
                           ),
                           SizedBox(height: 10,),
                           Text(
@@ -198,7 +159,7 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: size.height  * 0.01),
                 Text(
                   'قصيدة عشوائية',
-                  style: theme.textTheme.titleMedium,
+                  style: theme.textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),
               ],

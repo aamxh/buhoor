@@ -7,6 +7,7 @@ class Poet {
 
   final String name;
   final String bio;
+  @JsonKey(name: 'era_id')
   final int eraId;
 
   Poet({

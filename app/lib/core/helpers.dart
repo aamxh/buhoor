@@ -15,4 +15,17 @@ class MyHelpers {
     ));
   }
 
+  static bool isResOk(int code) {
+    if (code < 200 || code >= 300) return false;
+    return true;
+  }
+
+  static String getEraById(int id) {
+    final eras = MyConstants.eras;
+    for (int i = 0; i < eras.length; i++) {
+      if (eras[i]['id'] == id) return eras[i]['name'].toString();
+    }
+    return '';
+  }
+
 }
