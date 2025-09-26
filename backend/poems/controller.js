@@ -45,10 +45,7 @@ async function getFilteredPoems(req, res) {
   `;
 
     try {
-        const result = await pool.query(`
-          SELECT *
-          FROM meters
-          `);
+        const result = await pool.query(query, values);
         res.status(200).json({'poems': result.rows});
     } catch(err) {
         console.error('Error executing query: ', err);

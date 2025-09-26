@@ -1,5 +1,5 @@
 import 'package:buhoor/app/main/home_view_model.dart';
-import 'package:buhoor/app/main/search_view.dart';
+import 'package:buhoor/app/search/search_view.dart';
 import 'package:buhoor/app/settings/settings_widget.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:buhoor/core/data.dart';
@@ -159,7 +159,7 @@ class HomeView extends StatelessWidget {
                 ),
                 SizedBox(height: size.height  * 0.01,),
                 Text(
-                  'إبحث عن شعر، أو عن شاعر، أو عن عصر..',
+                  'ابحث عن شعر، أو عن شاعر، أو عن عصر..',
                   style: theme.textTheme.titleMedium,
                   textAlign: TextAlign.center,
                 ),
@@ -178,12 +178,12 @@ class HomeView extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            poems.first['title'].toString(),
+                            'random poem\'s title',
                             style: theme.textTheme.titleSmall,
                           ),
                           SizedBox(height: 10,),
                           Text(
-                            '- ${poems.first['poet']}',
+                            'random poem\'s poet',
                             style: theme.textTheme.titleSmall,
                           ),
                         ],
