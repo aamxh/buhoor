@@ -49,7 +49,9 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () => Get.to(() => ErasView()),
+                      onTap: () {
+                        Get.to(() => ErasView());
+                      },
                       child: Text(
                         'العصور',
                         style: theme.textTheme.titleLarge,

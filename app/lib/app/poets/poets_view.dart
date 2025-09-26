@@ -48,7 +48,7 @@ class PoetsView extends StatelessWidget {
                             children: [
                               Text(
                                 _vm.poets[idx].name,
-                                style: theme.textTheme.titleMedium,
+                                style: theme.textTheme.titleSmall,
                               ),
                               Text(
                                 MyHelpers.getEraById(_vm.poets[idx].eraId),
