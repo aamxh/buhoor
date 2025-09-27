@@ -15,7 +15,7 @@ async function getPoets(req, res) {
         const result = await pool.query(
             query,
             [(page - 1) * 20]);
-        res.status(200).json({poets: result.rows});
+        res.status(200).json({poets: result.rows, page: page});
     } catch(err) {
         console.log("Internal server error!", err);
         res.status(500).json({error: "Internal server error!"});

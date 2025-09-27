@@ -5,11 +5,13 @@ const mongoose = require('mongoose');
 const authRoutes = require('./auth/routes');
 const poemsRoutes = require('./poems/routes');
 const poetsRoutes = require('./poets/routes');
+const searchRoutes = require('./search/routes');
 
 app.use(express.json());
 app.use('/auth', authRoutes);
 app.use('/poems', poemsRoutes);
 app.use('/poets', poetsRoutes);
+app.use('/search', searchRoutes);
 const port = process.env.PORT;
 
 app.listen(port, () => {
