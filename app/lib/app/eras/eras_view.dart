@@ -1,6 +1,10 @@
+import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/eras/era_view.dart';
+import 'package:buhoor/app/eras/era_view_model.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class ErasView extends StatelessWidget {
 
@@ -30,23 +34,35 @@ class ErasView extends StatelessWidget {
                           right: size.width * 0.1,
                           left: size.width * 0.1,
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(width: 2, color: MyConstants.grey),
-                            borderRadius: BorderRadius.circular(20),
-                            color: theme.primaryColor == Colors.white ?
-                            MyConstants.lightGrey :
-                            MyConstants.darkGrey,
-                          ),
-                          height: size.height * 0.08,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                MyConstants.eras[idx]["name"].toString(),
-                                style: theme.textTheme.titleSmall,
-                              ),
-                            ],
+                        child: GestureDetector(
+                          onTap: () async {
+                            final eraViewModel = Get.find<EraViewModel>();
+                            final poems = await MyApi.getFilteredPoems(
+                              era: MyConstants.eras[idx]['slug'].toString(),
+                            );
+                            eraViewModel.eraName.value = MyConstants.eras[idx]['name'].toString();
+                            eraViewModel.eraSlug.value = MyConstants.eras[idx]['slug'].toString();
+                            eraViewModel.poems.value = poems;
+                            Get.to(() => EraView());
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 2, color: MyConstants.grey),
+                              borderRadius: BorderRadius.circular(20),
+                              color: theme.primaryColor == Colors.white ?
+                              MyConstants.lightGrey :
+                              MyConstants.darkGrey,
+                            ),
+                            height: size.height * 0.08,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  MyConstants.eras[idx]["name"].toString(),
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

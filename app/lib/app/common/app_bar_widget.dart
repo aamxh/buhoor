@@ -1,3 +1,6 @@
+import 'package:buhoor/app/eras/era_view_model.dart';
+import 'package:buhoor/app/genres/genre_view_model.dart';
+import 'package:buhoor/app/meters/meter_view_model.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:buhoor/main.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +43,12 @@ class AppBarWidget extends StatelessWidget {
                     child: IconButton(
                       icon: Icon(Icons.arrow_back, size: 30),
                       color: theme.colorScheme.secondary,
-                      onPressed: () => Get.back(),
+                      onPressed: () {
+                        Get.find<EraViewModel>().page.value = 1;
+                        Get.find<MeterViewModel>().page.value = 1;
+                        Get.find<GenreViewModel>().page.value = 1;
+                        Get.back();
+                      },
                     ),
                   ),
                 ],

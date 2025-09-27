@@ -46,7 +46,6 @@ class MyApi {
       final res = await dio.get("${MyConstants.baseUrl}poets?id=$id");
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data!['poets'][0];
-        print(data);
         return Poet.fromJson(data as Map<String, dynamic>);
       }
       return null;
