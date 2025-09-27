@@ -17,7 +17,7 @@ class MetersView extends StatelessWidget {
           SizedBox(height: size.height * 0.02,),
           Text(
             'كافة البحور الشعرية',
-            style: theme.textTheme.titleLarge,
+            style: theme.textTheme.headlineMedium,
           ),
           SizedBox(height: size.height * 0.02,),
           Expanded(
@@ -32,8 +32,11 @@ class MetersView extends StatelessWidget {
                     ),
                     child: Container(
                       decoration: BoxDecoration(
+                        border: Border.all(width: 2, color: MyConstants.grey),
                         borderRadius: BorderRadius.circular(20),
-                        color: MyConstants.lightGrey,
+                        color: theme.primaryColor == Colors.white ?
+                        MyConstants.lightGrey :
+                        MyConstants.darkGrey,
                       ),
                       height: size.height * 0.08,
                       child: Row(

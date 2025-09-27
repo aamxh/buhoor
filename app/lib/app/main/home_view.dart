@@ -4,10 +4,16 @@ import 'package:buhoor/app/eras/eras_view.dart';
 import 'package:buhoor/app/genres/genres_view.dart';
 import 'package:buhoor/app/main/home_view_model.dart';
 import 'package:buhoor/app/meters/meters_view.dart';
+import 'package:buhoor/app/poem/poem_view.dart';
+import 'package:buhoor/app/poem/poem_view_model.dart';
+import 'package:buhoor/app/poets/poet_view.dart';
+import 'package:buhoor/app/poets/poet_view_model.dart';
 import 'package:buhoor/app/poets/poets_view.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
 import 'package:buhoor/app/search/search_view.dart';
+import 'package:buhoor/app/search/search_view_model.dart';
 import 'package:buhoor/app/settings/settings_widget.dart';
+import 'package:buhoor/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,6 +22,7 @@ class HomeView extends StatelessWidget {
   HomeView({super.key});
 
   final _vm = Get.find<HomeViewModel>();
+  final _searchVm = Get.find<SearchViewModel>();
   final _key = GlobalKey<ScaffoldState>();
 
   @override
@@ -48,9 +55,7 @@ class HomeView extends StatelessWidget {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Get.to(() => ErasView());
-                      },
+                      onTap: () => Get.to(() => ErasView()),
                       child: Text(
                         'العصور',
                         style: theme.textTheme.titleLarge,
@@ -86,7 +91,7 @@ class HomeView extends StatelessWidget {
                       const SizedBox(width: 10,),
                       GestureDetector(
                         onTap: () {
-                          if (_vm.searchWord.isNotEmpty) {
+                          if (_searchVm.word.isNotEmpty) {
                             Get.to(() => SearchView());
                           }
                         },
@@ -108,7 +113,7 @@ class HomeView extends StatelessWidget {
                       const SizedBox(width: 10,),
                       Expanded(
                         child: TextField(
-                          onChanged: (val) => _vm.searchWord.value = val,
+                          onChanged: (val) => _searchVm.word.value = val,
                           style: theme.textTheme.titleMedium,
                           decoration: InputDecoration(
                             border: InputBorder.none,
@@ -126,37 +131,46 @@ class HomeView extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: size.height * 0.04,),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  height: size.height * 0.12,
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Obx(() =>
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              _vm.randomPoem.value.title,
-                              style: theme.textTheme.titleMedium,
-                            ),
-                            SizedBox(height: 10,),
-                            Text(
-                              _vm.randomPoem.value.poet,
-                              style: theme.textTheme.titleSmall,
-                            ),
-                          ],
+                GestureDetector(
+                  onTap: () {
+                    Get.find<PoemViewModel>().poem.value = _vm.randomPoem.value;
+                    Get.to(() => PoemView());
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: MyConstants.grey),
+                      borderRadius: BorderRadius.circular(20),
+                      color: theme.primaryColor == Colors.white ?
+                          MyConstants.lightGrey :
+                          MyConstants.darkGrey,
+                    ),
+                    height: size.height * 0.12,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Obx(() =>
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                _vm.randomPoem.value.title,
+                                style: theme.textTheme.titleLarge,
+                              ),
+                              SizedBox(height: 10,),
+                              Text(
+                                _vm.randomPoem.value.poet,
+                                style: theme.textTheme.titleSmall,
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        size: 30,
-                      )
-                    ],
+                        Icon(
+                          Icons.arrow_forward,
+                          size: 30,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height  * 0.01),
@@ -166,37 +180,51 @@ class HomeView extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
                 SizedBox(height: size.height * 0.04,),
-                Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(width: 2),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  height: size.height * 0.12,
-                  width: double.infinity,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Obx(() =>
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                _vm.randomPoet.value.name,
-                                style: theme.textTheme.titleMedium,
-                              ),
-                              SizedBox(height: 10,),
-                              Text(
-                                _vm.randomPoet.value.era,
-                                style: theme.textTheme.titleSmall,
-                              ),
-                            ],
-                          ),
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        size: 30,
-                      )
-                    ],
+                GestureDetector(
+                  onTap: () async {
+                    final poetViewModel = Get.find<PoetViewModel>();
+                    final poems = await MyApi.getFilteredPoems(
+                        poet: poetViewModel.poet.value.slug,
+                    );
+                    poetViewModel.poet.value = _vm.randomPoet.value;
+                    poetViewModel.poems.value = poems;
+                    Get.to(() => PoetView());
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 2, color: MyConstants.grey),
+                      borderRadius: BorderRadius.circular(20),
+                      color: theme.primaryColor == Colors.white ?
+                      MyConstants.lightGrey :
+                      MyConstants.darkGrey,
+                    ),
+                    height: size.height * 0.12,
+                    width: double.infinity,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Obx(() =>
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  _vm.randomPoet.value.name,
+                                  style: theme.textTheme.titleLarge,
+                                ),
+                                SizedBox(height: 10,),
+                                Text(
+                                  _vm.randomPoet.value.era,
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                              ],
+                            ),
+                        ),
+                        Icon(
+                          Icons.arrow_forward,
+                          size: 30,
+                        )
+                      ],
+                    ),
                   ),
                 ),
                 SizedBox(height: size.height * 0.01,),

@@ -1,5 +1,7 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/poets/poet_view.dart';
+import 'package:buhoor/app/poets/poet_view_model.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:buhoor/core/helpers.dart';
@@ -23,7 +25,7 @@ class PoetsView extends StatelessWidget {
           SizedBox(height: size.height * 0.02,),
           Text(
             'الشعراء بالترتيب الأبجدي',
-            style: theme.textTheme.titleLarge,
+            style: theme.textTheme.headlineMedium,
           ),
           SizedBox(height: size.height * 0.02,),
           Obx(() =>
@@ -37,24 +39,38 @@ class PoetsView extends StatelessWidget {
                           right: size.width * 0.1,
                           left: size.width * 0.1,
                         ),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: MyConstants.lightGrey,
-                          ),
-                          height: size.height * 0.08,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              Text(
-                                _vm.poets[idx].name,
-                                style: theme.textTheme.titleSmall,
-                              ),
-                              Text(
-                                _vm.poets[idx].era,
-                                style: theme.textTheme.bodyLarge,
-                              ),
-                            ],
+                        child: GestureDetector(
+                          onTap: () async {
+                            final poetViewModel = Get.find<PoetViewModel>();
+                            final poems = await MyApi.getFilteredPoems(
+                              poet: _vm.poets[idx].slug,
+                            );
+                            poetViewModel.poet.value = _vm.poets[idx];
+                            poetViewModel.poems.value = poems;
+                            Get.to(() => PoetView());
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              border: Border.all(width: 2, color: MyConstants.grey),
+                              borderRadius: BorderRadius.circular(20),
+                              color: theme.primaryColor == Colors.white ?
+                              MyConstants.lightGrey :
+                              MyConstants.darkGrey,
+                            ),
+                            height: size.height * 0.08,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: [
+                                Text(
+                                  _vm.poets[idx].name,
+                                  style: theme.textTheme.titleSmall,
+                                ),
+                                Text(
+                                  _vm.poets[idx].era,
+                                  style: theme.textTheme.bodyLarge,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),

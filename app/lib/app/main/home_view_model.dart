@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 
 class HomeViewModel extends GetxController {
 
-  Rx<String> searchWord = ''.obs;
   Rx<Poem> randomPoem = Poem().obs;
   Rx<Poet> randomPoet = Poet().obs;
 

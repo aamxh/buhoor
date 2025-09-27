@@ -8,11 +8,13 @@ class Poet {
   String name;
   String bio;
   String era;
+  String slug;
 
   Poet({
     this.name = '',
     this.bio = '',
     this.era = '',
+    this.slug = '',
   });
 
   factory Poet.fromJson(Map<String, dynamic> json) => _$PoetFromJson(json);

@@ -1,11 +1,14 @@
 import 'package:buhoor/app/auth/common/auth_api.dart';
 import 'package:buhoor/app/auth/sign_in/sign_in_view.dart';
-import 'package:buhoor/app/common/api.dart';
+import 'package:buhoor/app/eras/era_view_model.dart';
+import 'package:buhoor/app/genres/genre_view_model.dart';
 import 'package:buhoor/app/main/home_view.dart';
 import 'package:buhoor/app/main/home_view_model.dart';
+import 'package:buhoor/app/meters/meter_view_model.dart';
 import 'package:buhoor/app/poem/poem_view_model.dart';
 import 'package:buhoor/app/poets/poet_view_model.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
+import 'package:buhoor/app/search/search_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,8 +31,13 @@ class AuthWrapperView extends StatelessWidget {
         if (tokenIsValid) {
           Get.put(HomeViewModel());
           Get.put(PoetsViewModel());
+          Get.put(PoetViewModel());
+          Get.put(EraViewModel());
+          Get.put(MeterViewModel());
+          Get.put(GenreViewModel());
           Get.put(PoemViewModel());
           Get.put(PoetViewModel());
+          Get.put(SearchViewModel());
           return HomeView();
         }
         return SignInView();

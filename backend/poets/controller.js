@@ -12,7 +12,7 @@ async function getPoets(req, res) {
   if (id) {
     // Fetch single poet by id (ignore pagination)
     query = `
-      SELECT poets.id, poets.name, eras.name AS era, poets.bio
+      SELECT poets.id, poets.name, eras.name AS era, poets.bio, poets.slug
       FROM poets
       JOIN eras ON poets.era_id = eras.id
       WHERE poets.id = $1
@@ -23,7 +23,7 @@ async function getPoets(req, res) {
     // Fetch page of poets
     const offset = (page - 1) * 20;
     query = `
-      SELECT poets.id, poets.name, eras.name AS era, poets.bio
+      SELECT poets.id, poets.name, eras.name AS era, poets.bio, poets.slug
       FROM poets
       JOIN eras ON poets.era_id = eras.id
       ORDER BY poets.name ASC
