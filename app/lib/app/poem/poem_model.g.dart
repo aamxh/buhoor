@@ -7,12 +7,12 @@ part of 'poem_model.dart';
 // **************************************************************************
 
 Poem _$PoemFromJson(Map<String, dynamic> json) => Poem(
-      title: json['title'] as String,
-      content: json['content'] as String,
-      poet: json['poet'] as String,
-      genre: json['genre'] as String,
-      era: json['era'] as String,
-      meter: json['meter'] as String,
+      title: json['title'] as String? ?? '',
+      content: json['content'] as String? ?? '',
+      poet: json['poet'] as String? ?? '',
+      genre: json['genre'] as String? ?? '',
+      era: json['era'] as String? ?? '',
+      meter: json['meter'] as String? ?? '',
     );
 
 Map<String, dynamic> _$PoemToJson(Poem instance) => <String, dynamic>{

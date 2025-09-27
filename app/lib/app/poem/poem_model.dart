@@ -5,20 +5,20 @@ part 'poem_model.g.dart';
 @JsonSerializable()
 class Poem {
 
-  final String title;
-  final String content;
-  final String poet;
-  final String era;
-  final String genre;
-  final String meter;
+  String title;
+  String content;
+  String poet;
+  String era;
+  String genre;
+  String meter;
 
   Poem({
-    required this.title,
-    required this.content,
-    required this.poet,
-    required this.genre,
-    required this.era,
-    required this.meter,
+    this.title = '',
+    this.content = '',
+    this.poet = '',
+    this.genre = '',
+    this.era = '',
+    this.meter = '',
   });
 
   factory Poem.fromJson(Map<String, dynamic> json) => _$PoemFromJson(json);

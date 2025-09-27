@@ -1,5 +1,6 @@
 import 'package:buhoor/core/constants.dart';
 import 'package:get/get.dart';
+import 'dart:math';
 
 class MyHelpers {
 
@@ -20,12 +21,14 @@ class MyHelpers {
     return true;
   }
 
-  static String getEraById(int id) {
-    final eras = MyConstants.eras;
-    for (int i = 0; i < eras.length; i++) {
-      if (eras[i]['id'] == id) return eras[i]['name'].toString();
-    }
-    return '';
+  static int getRandomPoetId() {
+    final random = Random();
+    return random.nextInt(931) + 2609;
+  }
+
+  static int getRandomPoemId() {
+    final random = Random();
+    return random.nextInt(85342) + 1;
   }
 
 }

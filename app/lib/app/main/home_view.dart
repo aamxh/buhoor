@@ -8,7 +8,6 @@ import 'package:buhoor/app/poets/poets_view.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
 import 'package:buhoor/app/search/search_view.dart';
 import 'package:buhoor/app/settings/settings_widget.dart';
-import 'package:buhoor/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -132,24 +131,26 @@ class HomeView extends StatelessWidget {
                     border: Border.all(width: 2),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  height: size.height * 0.1,
+                  height: size.height * 0.12,
                   width: double.infinity,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'random poem\'s title',
-                            style: theme.textTheme.titleMedium,
-                          ),
-                          SizedBox(height: 10,),
-                          Text(
-                            'random poem\'s poet',
-                            style: theme.textTheme.titleSmall,
-                          ),
-                        ],
+                      Obx(() =>
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              _vm.randomPoem.value.title,
+                              style: theme.textTheme.titleMedium,
+                            ),
+                            SizedBox(height: 10,),
+                            Text(
+                              _vm.randomPoem.value.poet,
+                              style: theme.textTheme.titleSmall,
+                            ),
+                          ],
+                        ),
                       ),
                       Icon(
                         Icons.arrow_forward,
@@ -161,6 +162,46 @@ class HomeView extends StatelessWidget {
                 SizedBox(height: size.height  * 0.01),
                 Text(
                   'قصيدة عشوائية',
+                  style: theme.textTheme.titleSmall,
+                  textAlign: TextAlign.center,
+                ),
+                SizedBox(height: size.height * 0.04,),
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(width: 2),
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  height: size.height * 0.12,
+                  width: double.infinity,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Obx(() =>
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                _vm.randomPoet.value.name,
+                                style: theme.textTheme.titleMedium,
+                              ),
+                              SizedBox(height: 10,),
+                              Text(
+                                _vm.randomPoet.value.era,
+                                style: theme.textTheme.titleSmall,
+                              ),
+                            ],
+                          ),
+                      ),
+                      Icon(
+                        Icons.arrow_forward,
+                        size: 30,
+                      )
+                    ],
+                  ),
+                ),
+                SizedBox(height: size.height * 0.01,),
+                Text(
+                  'من شعراء العرب',
                   style: theme.textTheme.titleSmall,
                   textAlign: TextAlign.center,
                 ),

@@ -7,13 +7,13 @@ part of 'poet_model.dart';
 // **************************************************************************
 
 Poet _$PoetFromJson(Map<String, dynamic> json) => Poet(
-      name: json['name'] as String,
-      bio: json['bio'] as String,
-      eraId: (json['era_id'] as num).toInt(),
+      name: json['name'] as String? ?? '',
+      bio: json['bio'] as String? ?? '',
+      era: json['era'] as String? ?? '',
     );
 
 Map<String, dynamic> _$PoetToJson(Poet instance) => <String, dynamic>{
       'name': instance.name,
       'bio': instance.bio,
-      'era_id': instance.eraId,
+      'era': instance.era,
     };

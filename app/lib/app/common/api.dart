@@ -1,3 +1,4 @@
+import 'package:buhoor/app/poem/poem_model.dart';
 import 'package:buhoor/app/poets/poet_model.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:buhoor/core/helpers.dart';
@@ -21,6 +22,37 @@ class MyApi {
     } catch(ex) {
       print(ex);
       return [];
+    }
+  }
+
+  static Future<Poem?> getRandomPoem() async {
+    try {
+      final id = MyHelpers.getRandomPoemId();
+      final res = await dio.get("${MyConstants.baseUrl}poems?id=$id");
+      if (MyHelpers.isResOk(res.statusCode!)) {
+        final data = res.data!['poems'][0];
+        return Poem.fromJson(data as Map<String, dynamic>);
+      }
+      return null;
+    } catch(ex) {
+      print(ex);
+      return null;
+    }
+  }
+
+  static Future<Poet?> getRandomPoet() async {
+    try {
+      final id = MyHelpers.getRandomPoetId();
+      final res = await dio.get("${MyConstants.baseUrl}poets?id=$id");
+      if (MyHelpers.isResOk(res.statusCode!)) {
+        final data = res.data!['poets'][0];
+        print(data);
+        return Poet.fromJson(data as Map<String, dynamic>);
+      }
+      return null;
+    } catch(ex) {
+      print(ex);
+      return null;
     }
   }
 

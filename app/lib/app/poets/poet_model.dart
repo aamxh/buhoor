@@ -5,15 +5,14 @@ part 'poet_model.g.dart';
 @JsonSerializable()
 class Poet {
 
-  final String name;
-  final String bio;
-  @JsonKey(name: 'era_id')
-  final int eraId;
+  String name;
+  String bio;
+  String era;
 
   Poet({
-    required this.name,
-    required this.bio,
-    required this.eraId,
+    this.name = '',
+    this.bio = '',
+    this.era = '',
   });
 
   factory Poet.fromJson(Map<String, dynamic> json) => _$PoetFromJson(json);
