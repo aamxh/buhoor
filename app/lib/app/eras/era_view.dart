@@ -48,7 +48,13 @@ class EraView extends StatelessWidget {
                         child: Container(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            color: MyConstants.lightGrey,
+                            border: Border.all(
+                              width: 2,
+                              color: MyConstants.grey,
+                            ),
+                            color: theme.primaryColor == Colors.white ?
+                            MyConstants.lightGrey :
+                            MyConstants.darkGrey,
                           ),
                           height: size.height * 0.1,
                           child: Column(

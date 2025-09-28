@@ -9,6 +9,7 @@ import 'package:buhoor/app/poem/poem_view_model.dart';
 import 'package:buhoor/app/poets/poet_view_model.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
 import 'package:buhoor/app/search/search_view_model.dart';
+import 'package:buhoor/core/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,7 @@ class AuthWrapperView extends StatelessWidget {
           Get.put(PoemViewModel());
           Get.put(PoetViewModel());
           Get.put(SearchViewModel());
+          Get.put(ThemeController());
           return HomeView();
         }
         return SignInView();

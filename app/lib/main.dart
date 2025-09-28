@@ -4,15 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await _initializeApp();
-  runApp(MyApp());
-}
-
-Future<void> _initializeApp() async {
-
-}
+void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
 
@@ -22,6 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: lightTheme,
+      darkTheme: darkTheme,
       debugShowCheckedModeBanner: false,
       supportedLocales: [Locale('ar')],
       locale: Locale('ar'),

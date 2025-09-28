@@ -1,16 +1,16 @@
 import 'package:buhoor/app/eras/era_view_model.dart';
 import 'package:buhoor/app/genres/genre_view_model.dart';
 import 'package:buhoor/app/meters/meter_view_model.dart';
-import 'package:buhoor/core/constants.dart';
-import 'package:buhoor/main.dart';
+import 'package:buhoor/core/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class AppBarWidget extends StatelessWidget {
 
-  const AppBarWidget({super.key, this.drawerKey});
+  AppBarWidget({super.key, this.drawerKey});
 
   final GlobalKey<ScaffoldState>? drawerKey;
+  final _vm = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -24,47 +24,46 @@ class AppBarWidget extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  SizedBox(width: 10,),
-                  drawerKey != null ? Padding(
-                    padding: EdgeInsets.only(bottom: size.height * 0.02),
-                    child: IconButton(
-                      onPressed: () => drawerKey!.currentState!.openDrawer(),
-                      icon: Icon(
-                        Icons.view_headline_outlined,
-                        size: 30,
-                        color: theme.colorScheme.secondary,
-                      ),
-                    ),
-                  ) : Padding(
-                    padding: EdgeInsets.only(bottom: size.height * 0.02),
-                    child: IconButton(
-                      icon: Icon(Icons.arrow_back, size: 30),
-                      color: theme.colorScheme.secondary,
-                      onPressed: () {
-                        Get.find<EraViewModel>().page.value = 1;
-                        Get.find<MeterViewModel>().page.value = 1;
-                        Get.find<GenreViewModel>().page.value = 1;
-                        Get.back();
-                      },
-                    ),
+              drawerKey != null ? Padding(
+                padding: EdgeInsets.only(bottom: size.height * 0.02, right: 10),
+                child: IconButton(
+                  onPressed: () => drawerKey!.currentState!.openDrawer(),
+                  icon: Icon(
+                    Icons.view_headline_outlined,
+                    size: 30,
+                    color: theme.colorScheme.secondary,
                   ),
-                ],
+                ),
+              ) : Padding(
+                padding: EdgeInsets.only(bottom: size.height * 0.02),
+                child: IconButton(
+                  icon: Icon(Icons.arrow_back, size: 30),
+                  color: theme.colorScheme.secondary,
+                  onPressed: () {
+                    Get.find<EraViewModel>().page.value = 1;
+                    Get.find<MeterViewModel>().page.value = 1;
+                    Get.find<GenreViewModel>().page.value = 1;
+                    Get.back();
+                  },
+                ),
               ),
               Image.asset(
                 theme.primaryColor == Colors.white ?
                 'assets/buhoor.png' :
-                'assets/buhoor_dark.png',
+                'assets/buhoor_dark.jpg',
                 width: size.width * 0.2,
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Icon(
-                  Icons.view_headline_outlined,
-                  size: 30,
-                  color: theme.scaffoldBackgroundColor,
+                padding: EdgeInsets.only(bottom: size.height * 0.02, left: 10),
+                child: IconButton(
+                  onPressed: () {
+                    if (drawerKey != null) _vm.switchTheme();
+                  },
+                  icon: Icon(
+                    _vm.isDark.value ? Icons.sunny : Icons.nightlight_round,
+                    size: 30,
+                    color: drawerKey == null ? theme.primaryColor : theme.colorScheme.secondary,
+                  ),
                 ),
               ),
             ],

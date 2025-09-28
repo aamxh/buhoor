@@ -32,10 +32,10 @@ final lightTheme = ThemeData.light().copyWith(
   ),
 );
 
-final darkTheme = ThemeData.light().copyWith(
+final darkTheme = ThemeData.dark().copyWith(
   primaryColor: Colors.black,
   scaffoldBackgroundColor: Colors.black,
-  colorScheme: ColorScheme.light().copyWith(
+  colorScheme: ColorScheme.dark().copyWith(
     secondary: Colors.white,
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
