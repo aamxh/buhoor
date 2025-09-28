@@ -37,12 +37,13 @@ class MetersView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () async {
                         final meterViewModel = Get.find<MeterViewModel>();
-                        final poems = await MyApi.getFilteredPoems(
+                        final data = await MyApi.getFilteredPoems(
                           meter: MyConstants.meters[idx]['slug'].toString(),
                         );
                         meterViewModel.meterName.value = MyConstants.meters[idx]['name'].toString();
                         meterViewModel.meterSlug.value = MyConstants.meters[idx]['slug'].toString();
-                        meterViewModel.poems.value = poems;
+                        meterViewModel.poems.value = data['poems'];
+                        meterViewModel.totalPages.value = data['totalPages'];
                         Get.to(() => MeterView());
                       },
                       child: Container(

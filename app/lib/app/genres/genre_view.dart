@@ -90,26 +90,28 @@ class GenreView extends StatelessWidget {
                     icon: Icon(Icons.arrow_back_ios, size: 20,),
                     onPressed: () async {
                       _vm.page.value = _vm.page.value - 1;
-                      final poems = await MyApi.getFilteredPoems(
+                      final data = await MyApi.getFilteredPoems(
                         page: _vm.page.value,
                         genre: _vm.genreSlug.value,
                       );
-                      _vm.poems.assignAll(poems);
+                      _vm.poems.assignAll(data['poems']);
+                      _vm.totalPages.value = data['totalPages'];
                     },
                   ),
                   Text(
                     "${_vm.page.value}",
                     style: theme.textTheme.titleMedium,
                   ),
-                  _vm.page.value == 47 ? Container() : IconButton(
+                  _vm.page.value == _vm.totalPages.value ? Container() : IconButton(
                     icon: Icon(Icons.arrow_forward_ios, size: 20,),
                     onPressed: () async {
                       _vm.page.value = _vm.page.value + 1;
-                      final poems = await MyApi.getFilteredPoems(
+                      final data = await MyApi.getFilteredPoems(
                         genre: _vm.genreSlug.value,
                         page: _vm.page.value,
                       );
-                      _vm.poems.assignAll(poems);
+                      _vm.poems.assignAll(data['poems']);
+                      _vm.totalPages.value = data['totalPages'];
                     },
                   ),
                 ],

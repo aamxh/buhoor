@@ -42,11 +42,12 @@ class PoetsView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () async {
                             final poetViewModel = Get.find<PoetViewModel>();
-                            final poems = await MyApi.getFilteredPoems(
+                            final data = await MyApi.getFilteredPoems(
                               poet: _vm.poets[idx].slug,
                             );
                             poetViewModel.poet.value = _vm.poets[idx];
-                            poetViewModel.poems.value = poems;
+                            poetViewModel.poems.value = data['poems'];
+                            poetViewModel.totalPages.value = data['totalPages'];
                             Get.to(() => PoetView());
                           },
                           child: Container(

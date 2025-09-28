@@ -7,5 +7,6 @@ class MeterViewModel extends GetxController {
   var meterSlug = ''.obs;
   var poems = <Poem>[].obs;
   RxInt page = 1.obs;
+  RxInt totalPages = 1.obs;
 
 }

@@ -1,7 +1,6 @@
 const pool = require('../config/pg_db');
 
 async function getFilteredPoems(req, res) {
-  
   const { era, poet, genre, meter, page, id } = req.query;
 
   const conditions = [];
@@ -33,66 +32,87 @@ async function getFilteredPoems(req, res) {
   let query;
   let paginationInfo = {};
 
-  if (id) {
-    // If id is specified, fetch only that poem (ignore pagination)
-    query = `
-      SELECT 
-        poems.id,
-        poems.title,
-        poems.content,
-        poets.name AS poet,
-        eras.name AS era,
-        themes.name AS genre,
-        meters.name AS meter
-      FROM poems
-      JOIN poets ON poems.poet_id = poets.id
-      JOIN eras ON poets.era_id = eras.id
-      JOIN themes ON poems.theme_id = themes.id
-      JOIN meters ON poems.meter_id = meters.id
-      ${whereClause}
-      LIMIT 1
-    `;
-  } else {
-    // Otherwise, apply pagination
-    const pageSize = 20;
-    const currentPage = parseInt(page, 10) || 1;
-    const offset = (currentPage - 1) * pageSize;
-
-    values.push(pageSize, offset);
-
-    query = `
-      SELECT 
-        poems.id,
-        poems.title,
-        poems.content,
-        poets.name AS poet,
-        eras.name AS era,
-        themes.name AS genre,
-        meters.name AS meter
-      FROM poems
-      JOIN poets ON poems.poet_id = poets.id
-      JOIN eras ON poets.era_id = eras.id
-      JOIN themes ON poems.theme_id = themes.id
-      JOIN meters ON poems.meter_id = meters.id
-      ${whereClause}
-      ORDER BY poems.id ASC
-      LIMIT $${values.length - 1} OFFSET $${values.length}
-    `;
-
-    paginationInfo = { page: currentPage, pageSize };
-  }
-
   try {
-    const result = await pool.query(query, values);
-    res.status(200).json({
-      poems: result.rows,
-      ...paginationInfo,
-    });
+    if (id) {
+      // If id is specified, fetch only that poem (ignore pagination)
+      query = `
+        SELECT 
+          poems.id,
+          poems.title,
+          poems.content,
+          poets.name AS poet,
+          eras.name AS era,
+          themes.name AS genre,
+          meters.name AS meter
+        FROM poems
+        JOIN poets ON poems.poet_id = poets.id
+        JOIN eras ON poets.era_id = eras.id
+        JOIN themes ON poems.theme_id = themes.id
+        JOIN meters ON poems.meter_id = meters.id
+        ${whereClause}
+        LIMIT 1
+      `;
+
+      const result = await pool.query(query, values);
+      return res.status(200).json({ poems: result.rows });
+    } else {
+      // Pagination
+      const pageSize = 20;
+      const currentPage = parseInt(page, 10) || 1;
+      const offset = (currentPage - 1) * pageSize;
+
+      // Count query to calculate total pages
+      const countQuery = `
+        SELECT COUNT(*) AS total
+        FROM poems
+        JOIN poets ON poems.poet_id = poets.id
+        JOIN eras ON poets.era_id = eras.id
+        JOIN themes ON poems.theme_id = themes.id
+        JOIN meters ON poems.meter_id = meters.id
+        ${whereClause}
+      `;
+      const countResult = await pool.query(countQuery, values);
+      const totalCount = parseInt(countResult.rows[0].total, 10);
+      const totalPages = Math.ceil(totalCount / pageSize);
+
+      // Data query with limit + offset
+      const dataValues = [...values, pageSize, offset];
+      query = `
+        SELECT 
+          poems.id,
+          poems.title,
+          poems.content,
+          poets.name AS poet,
+          eras.name AS era,
+          themes.name AS genre,
+          meters.name AS meter
+        FROM poems
+        JOIN poets ON poems.poet_id = poets.id
+        JOIN eras ON poets.era_id = eras.id
+        JOIN themes ON poems.theme_id = themes.id
+        JOIN meters ON poems.meter_id = meters.id
+        ${whereClause}
+        ORDER BY poems.id ASC
+        LIMIT $${dataValues.length - 1} OFFSET $${dataValues.length}
+      `;
+      const result = await pool.query(query, dataValues);
+
+      paginationInfo = {
+        page: currentPage,
+        pageSize,
+        totalPages,
+        totalCount,
+      };
+
+      return res.status(200).json({
+        poems: result.rows,
+        ...paginationInfo,
+      });
+    }
   } catch (err) {
     console.error('Error executing query: ', err);
     res.status(500).json({ error: 'Internal server error!' });
   }
-  
 }
 
 exports.getFilteredPoems = getFilteredPoems;

@@ -37,12 +37,13 @@ class GenresView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () async {
                         final genreViewModel = Get.find<GenreViewModel>();
-                        final poems = await MyApi.getFilteredPoems(
+                        final data = await MyApi.getFilteredPoems(
                           genre: MyConstants.genres[idx]['slug'].toString(),
                         );
                         genreViewModel.genreName.value = MyConstants.genres[idx]['name'].toString();
                         genreViewModel.genreSlug.value = MyConstants.genres[idx]['slug'].toString();
-                        genreViewModel.poems.value = poems;
+                        genreViewModel.poems.value = data['poems'];
+                        genreViewModel.totalPages.value = data['totalPages'];
                         Get.to(() => GenreView());
                       },
                       child: Container(

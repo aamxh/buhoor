@@ -37,12 +37,13 @@ class ErasView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () async {
                             final eraViewModel = Get.find<EraViewModel>();
-                            final poems = await MyApi.getFilteredPoems(
+                            final data = await MyApi.getFilteredPoems(
                               era: MyConstants.eras[idx]['slug'].toString(),
                             );
                             eraViewModel.eraName.value = MyConstants.eras[idx]['name'].toString();
                             eraViewModel.eraSlug.value = MyConstants.eras[idx]['slug'].toString();
-                            eraViewModel.poems.value = poems;
+                            eraViewModel.poems.value = data['poems'];
+                            eraViewModel.totalPages.value = data['totalPages'];
                             Get.to(() => EraView());
                           },
                           child: Container(

@@ -55,7 +55,7 @@ class MyApi {
     }
   }
 
-  static Future<List<Poem>> getFilteredPoems({
+  static Future<Map<String, dynamic>> getFilteredPoems({
     String? poet,
     String? genre,
     String? era,
@@ -83,14 +83,15 @@ class MyApi {
     try {
       final res = await dio.get('${MyConstants.baseUrl}poems$query');
       if (MyHelpers.isResOk(res.statusCode!)) {
-        final data = res.data!['poems'] as List;
-        final poems = data.map((json) => Poem.fromJson(json as Map<String, dynamic>)).toList();
-        return poems;
+        final poemsList = res.data!['poems'] as List;
+        final totalPages = res.data!['totalPages'] as int;
+        final poems = poemsList.map((json) => Poem.fromJson(json as Map<String, dynamic>)).toList();
+        return {"poems": poems, "totalPages": totalPages};
       }
-      return [];
+      return {"poems": [], "totalPages": 1};
     } catch(ex) {
       print(ex);
-      return [];
+      return {"poems": [], "totalPages": 1};
     }
   }
 

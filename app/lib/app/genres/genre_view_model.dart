@@ -7,5 +7,6 @@ class GenreViewModel extends GetxController {
   var genreSlug = ''.obs;
   var poems = <Poem>[].obs;
   RxInt page = 1.obs;
+  RxInt totalPages = 1.obs;
 
 }

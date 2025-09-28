@@ -185,11 +185,12 @@ class HomeView extends StatelessWidget {
                 GestureDetector(
                   onTap: () async {
                     final poetViewModel = Get.find<PoetViewModel>();
-                    final poems = await MyApi.getFilteredPoems(
+                    final data = await MyApi.getFilteredPoems(
                         poet: poetViewModel.poet.value.slug,
                     );
                     poetViewModel.poet.value = _vm.randomPoet.value;
-                    poetViewModel.poems.value = poems;
+                    poetViewModel.poems.value = data['poems'];
+                    poetViewModel.totalPages.value = data['totalPages'];
                     Get.to(() => PoetView());
                   },
                   child: Container(

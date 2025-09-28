@@ -7,5 +7,6 @@ class EraViewModel extends GetxController {
   var eraSlug = ''.obs;
   var poems = <Poem>[].obs;
   RxInt page = 1.obs;
+  RxInt totalPages = 1.obs;
 
 }
