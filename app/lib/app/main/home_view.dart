@@ -98,6 +98,7 @@ class HomeView extends StatelessWidget {
                         GestureDetector(
                           onTap: () {
                             if (_searchVm.word.isNotEmpty) {
+                              _searchVm.searchEnded.value = false;
                               Get.to(() => SearchView());
                             }
                           },
@@ -119,7 +120,13 @@ class HomeView extends StatelessWidget {
                         const SizedBox(width: 10,),
                         Expanded(
                           child: TextField(
-                            onChanged: (val) => _searchVm.word.value = val,
+                            onChanged: (val) => _searchVm.word.value = val.trim(),
+                            onSubmitted: (val) {
+                              if (_searchVm.word.isNotEmpty) {
+                                _searchVm.searchEnded.value = false;
+                                Get.to(() => SearchView());
+                              }
+                            },
                             style: theme.textTheme.titleMedium,
                             decoration: InputDecoration(
                               border: InputBorder.none,

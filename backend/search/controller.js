@@ -1,23 +1,29 @@
 const pool = require('../config/pg_db');
 
 async function search(req, res) {
-    
-    const {q} = req.query;
-    
-    if (!q) {
-        return res.status(400).json({error: 'Query parameter "q" is required.'});
-    }
-    
-    query = `
+  const { q } = req.query;
+
+  if (!q) {
+    return res.status(400).json({ error: 'Query parameter "q" is required.' });
+  }
+
+  const query = `
     WITH search AS (
   SELECT 
     'poems' AS type,
     json_build_object(
-      'id', poems.id,
       'title', poems.title,
-      'content', poems.content
+      'content', poems.content,
+      'poet', poets.name,
+      'era', eras.name,
+      'genre', themes.name,
+      'meter', meters.name
     ) AS result
   FROM poems
+  JOIN poets ON poems.poet_id = poets.id
+  JOIN eras ON poets.era_id = eras.id
+  JOIN themes ON poems.theme_id = themes.id
+  JOIN meters ON poems.meter_id = meters.id
   WHERE poems.title ILIKE $1 OR poems.content ILIKE $1
 
   UNION ALL
@@ -25,46 +31,14 @@ async function search(req, res) {
   SELECT 
     'poets' AS type,
     json_build_object(
-      'id', poets.id,
       'name', poets.name,
-      'era', eras.name
+      'bio', poets.bio,
+      'era', eras.name,
+      'slug', poets.slug
     ) AS result
   FROM poets
   JOIN eras ON poets.era_id = eras.id
-  WHERE poets.name ILIKE $1
-
-  UNION ALL
-
-  SELECT 
-    'genres' AS type,
-    json_build_object(
-      'id', themes.id,
-      'name', themes.name
-    ) AS result
-  FROM themes
-  WHERE themes.name ILIKE $1
-
-  UNION ALL
-
-  SELECT 
-    'eras' AS type,
-    json_build_object(
-      'id', eras.id,
-      'name', eras.name
-    ) AS result
-  FROM eras
-  WHERE eras.name ILIKE $1
-
-  UNION ALL
-
-  SELECT 
-    'meters' AS type,
-    json_build_object(
-      'id', meters.id,
-      'name', meters.name
-    ) AS result
-  FROM meters
-  WHERE meters.name ILIKE $1
+  WHERE poets.name ILIKE $1 OR poets.slug::text ILIKE $1
 )
 SELECT json_agg(
   json_build_object(
@@ -73,16 +47,15 @@ SELECT json_agg(
   )
 ) AS results
 FROM search;
-    `;
-    
-    try {
-        const result = await pool.query(query, [`%${q}%`]);
-        res.status(200).json(result.rows);
-    } catch(err) {
-        console.error('Error executing query:', err);
-        res.status(500).json({error: 'Internal server error!'});
-    }
+  `;
 
+  try {
+    const result = await pool.query(query, [`%${q}%`]);
+    res.status(200).json(result.rows[0]); // return the JSON object, not array of rows
+  } catch (err) {
+    console.error('Error executing query:', err);
+    res.status(500).json({ error: 'Internal server error!' });
+  }
 }
 
 exports.search = search;

@@ -95,4 +95,31 @@ class MyApi {
     }
   }
 
+  static Future<Map<String, List>> searchKeyWord(String query) async {
+    Map<String, List> result = {'poems': [], 'poets': []};
+    try {
+      final res = await dio.get("${MyConstants.baseUrl}search?q=$query");
+      print(res.data);
+
+      if (MyHelpers.isResOk(res.statusCode!)) {
+        final data = res.data['results'] as List;
+
+        data.forEach((e) {
+          if (e['type'] == 'poems') {
+            result['poems']!.add(e['result']);
+          } else if (e['type'] == 'poets') {
+            result['poets']!.add(e['result']);
+          }
+        });
+
+        return result;
+      }
+      return result;
+    } catch (ex) {
+      print("Error: $ex");
+      return result;
+    }
+  }
+
+
 }
