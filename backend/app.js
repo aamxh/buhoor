@@ -2,10 +2,10 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
-const authRoutes = require('./auth/routes');
-const poemsRoutes = require('./poems/routes');
-const poetsRoutes = require('./poets/routes');
-const searchRoutes = require('./search/routes');
+const authRoutes = require('./routes/auth_routes');
+const poemsRoutes = require('./routes/poems_routes');
+const poetsRoutes = require('./routes/poets_routes');
+const searchRoutes = require('./routes/search_routes');
 
 app.use(express.json());
 app.use('/auth', authRoutes);

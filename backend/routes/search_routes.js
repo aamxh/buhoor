@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const {getPoets} = require('./controller');
+const {search} = require('../controllers/search_controller');
 
-router.get('/', getPoets);
+router.get('/', search);
 
 module.exports = router;
