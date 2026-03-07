@@ -8,7 +8,7 @@ class MyConstants {
   static final lightGrey = Colors.grey[100];
   static final darkGrey = Colors.grey[900];
   static final errorColor = Color(0xffb02727);
-  static final baseUrl = 'http://10.0.2.2:8000/';
+  static final baseUrl = 'https://buhoor.onrender.com';
   static const eras = [
     {
       "id": 1,
