@@ -12,10 +12,10 @@ app.use('/auth', authRoutes);
 app.use('/poems', poemsRoutes);
 app.use('/poets', poetsRoutes);
 app.use('/search', searchRoutes);
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
-    console.log(`Server listening at http://localhost:${port}`);
+app.listen(port, '0.0.0.0' ,() => {
+    console.log(`Server listening on: ${port}`);
 });
 mongoose.connect(process.env.MONGO_URI)
 .then(() => console.log('Connected to MongoDB.'))
