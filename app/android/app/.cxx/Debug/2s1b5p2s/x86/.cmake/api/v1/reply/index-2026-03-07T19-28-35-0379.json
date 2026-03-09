@@ -8,10 +8,10 @@
 		},
 		"paths" : 
 		{
-			"cmake" : "C:/Users/Dell/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cmake.exe",
-			"cpack" : "C:/Users/Dell/AppData/Local/Android/Sdk/cmake/3.22.1/bin/cpack.exe",
-			"ctest" : "C:/Users/Dell/AppData/Local/Android/Sdk/cmake/3.22.1/bin/ctest.exe",
-			"root" : "C:/Users/Dell/AppData/Local/Android/Sdk/cmake/3.22.1/share/cmake-3.22"
+			"cmake" : "D:/Android/sdk/cmake/3.22.1/bin/cmake.exe",
+			"cpack" : "D:/Android/sdk/cmake/3.22.1/bin/cpack.exe",
+			"ctest" : "D:/Android/sdk/cmake/3.22.1/bin/ctest.exe",
+			"root" : "D:/Android/sdk/cmake/3.22.1/share/cmake-3.22"
 		},
 		"version" : 
 		{
@@ -26,7 +26,7 @@
 	"objects" : 
 	[
 		{
-			"jsonFile" : "codemodel-v2-4b932e6aa1ce8114230a.json",
+			"jsonFile" : "codemodel-v2-1ad19f8fd7a02600be1b.json",
 			"kind" : "codemodel",
 			"version" : 
 			{
@@ -35,7 +35,7 @@
 			}
 		},
 		{
-			"jsonFile" : "cache-v2-992814b6bdf65a76fadb.json",
+			"jsonFile" : "cache-v2-11b80e0e10146f03115d.json",
 			"kind" : "cache",
 			"version" : 
 			{
@@ -44,7 +44,7 @@
 			}
 		},
 		{
-			"jsonFile" : "cmakeFiles-v1-b9f63ca3c714edd2f311.json",
+			"jsonFile" : "cmakeFiles-v1-028ac0e0ab795cc0e73c.json",
 			"kind" : "cmakeFiles",
 			"version" : 
 			{
@@ -59,7 +59,7 @@
 		{
 			"cache-v2" : 
 			{
-				"jsonFile" : "cache-v2-992814b6bdf65a76fadb.json",
+				"jsonFile" : "cache-v2-11b80e0e10146f03115d.json",
 				"kind" : "cache",
 				"version" : 
 				{
@@ -69,7 +69,7 @@
 			},
 			"cmakeFiles-v1" : 
 			{
-				"jsonFile" : "cmakeFiles-v1-b9f63ca3c714edd2f311.json",
+				"jsonFile" : "cmakeFiles-v1-028ac0e0ab795cc0e73c.json",
 				"kind" : "cmakeFiles",
 				"version" : 
 				{
@@ -79,7 +79,7 @@
 			},
 			"codemodel-v2" : 
 			{
-				"jsonFile" : "codemodel-v2-4b932e6aa1ce8114230a.json",
+				"jsonFile" : "codemodel-v2-1ad19f8fd7a02600be1b.json",
 				"kind" : "codemodel",
 				"version" : 
 				{

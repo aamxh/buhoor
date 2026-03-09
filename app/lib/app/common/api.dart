@@ -10,9 +10,15 @@ class MyApi {
 
   static final dio = Dio();
 
-  static Future<List<Poet>> getPoetsByPage(int page) async {
+  static Future<List<Poet>> getPoetsByPage(
+    int page, {
+    CancelToken? cancelToken,
+  }) async {
     try {
-      final res = await dio.get("${MyConstants.baseUrl}poets?page=$page");
+      final res = await dio.get(
+        "${MyConstants.baseUrl}poets?page=$page",
+        cancelToken: cancelToken,
+      );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data!['poets'] as List;
         final poets = data.map((json) => Poet.fromJson(json as Map<String, dynamic>)).toList();
@@ -25,10 +31,15 @@ class MyApi {
     }
   }
 
-  static Future<Poem?> getRandomPoem() async {
+  static Future<Poem?> getRandomPoem({
+    CancelToken? cancelToken,
+  }) async {
     try {
       final id = MyHelpers.getRandomPoemId();
-      final res = await dio.get("${MyConstants.baseUrl}poems?id=$id");
+      final res = await dio.get(
+        "${MyConstants.baseUrl}poems?id=$id",
+        cancelToken: cancelToken,
+      );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data!['poems'][0];
         return Poem.fromJson(data as Map<String, dynamic>);
@@ -40,10 +51,15 @@ class MyApi {
     }
   }
 
-  static Future<Poet?> getRandomPoet() async {
+  static Future<Poet?> getRandomPoet({
+    CancelToken? cancelToken,
+  }) async {
     try {
       final id = MyHelpers.getRandomPoetId();
-      final res = await dio.get("${MyConstants.baseUrl}poets?id=$id");
+      final res = await dio.get(
+        "${MyConstants.baseUrl}poets?id=$id",
+        cancelToken: cancelToken,
+      );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data!['poets'][0];
         return Poet.fromJson(data as Map<String, dynamic>);
@@ -60,7 +76,8 @@ class MyApi {
     String? genre,
     String? era,
     String? meter,
-    int page = 1
+    int page = 1,
+    CancelToken? cancelToken,
   }) async {
     String query = "?";
     query += "page=$page";
@@ -81,7 +98,10 @@ class MyApi {
       query += "meter=$meter";
     }
     try {
-      final res = await dio.get('${MyConstants.baseUrl}poems$query');
+      final res = await dio.get(
+        '${MyConstants.baseUrl}poems$query',
+        cancelToken: cancelToken,
+      );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final poemsList = res.data!['poems'] as List;
         final totalPages = res.data!['totalPages'] as int;
@@ -95,10 +115,16 @@ class MyApi {
     }
   }
 
-  static Future<Map<String, List>> searchKeyWord(String query) async {
+  static Future<Map<String, List>> searchKeyWord(
+    String query, {
+    CancelToken? cancelToken,
+  }) async {
     Map<String, List> result = {'poems': [], 'poets': []};
     try {
-      final res = await dio.get("${MyConstants.baseUrl}search?q=$query");
+      final res = await dio.get(
+        "${MyConstants.baseUrl}search?q=$query",
+        cancelToken: cancelToken,
+      );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data['results'] as List;
         data.forEach((e) {

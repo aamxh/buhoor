@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/app/poem/poem_view.dart';
 import 'package:buhoor/app/poem/poem_view_model.dart';
 import 'package:buhoor/app/poets/poet_view.dart';
@@ -102,9 +103,13 @@ class _SearchViewState extends State<SearchView> {
                         child: GestureDetector(
                           onTap: () async {
                             final poetViewModel = Get.find<PoetViewModel>();
-                            final data = await MyApi.getFilteredPoems(
-                              poet: _vm.poetsSearched[idx].slug,
+                            final data = await runWithLoadingRoute(
+                              (cancelToken) => MyApi.getFilteredPoems(
+                                poet: _vm.poetsSearched[idx].slug,
+                                cancelToken: cancelToken,
+                              ),
                             );
+                            if (data == null) return;
                             poetViewModel.poet.value = _vm.poetsSearched[idx];
                             poetViewModel.poems.value = data['poems'];
                             poetViewModel.totalPages.value = data['totalPages'];

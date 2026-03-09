@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,9 +38,13 @@ class GenresView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () async {
                         final genreViewModel = Get.find<GenreViewModel>();
-                        final data = await MyApi.getFilteredPoems(
-                          genre: MyConstants.genres[idx]['slug'].toString(),
+                        final data = await runWithLoadingRoute(
+                          (cancelToken) => MyApi.getFilteredPoems(
+                            genre: MyConstants.genres[idx]['slug'].toString(),
+                            cancelToken: cancelToken,
+                          ),
                         );
+                        if (data == null) return;
                         genreViewModel.genreName.value = MyConstants.genres[idx]['name'].toString();
                         genreViewModel.genreSlug.value = MyConstants.genres[idx]['slug'].toString();
                         genreViewModel.poems.value = data['poems'];

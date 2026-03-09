@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/app/poets/poet_view.dart';
 import 'package:buhoor/app/poets/poet_view_model.dart';
 import 'package:buhoor/app/poets/poets_view_model.dart';
@@ -41,9 +42,13 @@ class PoetsView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () async {
                             final poetViewModel = Get.find<PoetViewModel>();
-                            final data = await MyApi.getFilteredPoems(
-                              poet: _vm.poets[idx].slug,
+                            final data = await runWithLoadingRoute(
+                              (cancelToken) => MyApi.getFilteredPoems(
+                                poet: _vm.poets[idx].slug,
+                                cancelToken: cancelToken,
+                              ),
                             );
+                            if (data == null) return;
                             poetViewModel.poet.value = _vm.poets[idx];
                             poetViewModel.poems.value = data['poems'];
                             poetViewModel.totalPages.value = data['totalPages'];
@@ -85,8 +90,15 @@ class PoetsView extends StatelessWidget {
                 _vm.page.value == 1 ? Container() : IconButton(
                   icon: Icon(Icons.arrow_back_ios, size: 20,),
                   onPressed: () async {
-                    _vm.page.value = _vm.page.value - 1;
-                    final poets = await MyApi.getPoetsByPage(_vm.page.value);
+                    final nextPage = _vm.page.value - 1;
+                    final poets = await runWithLoadingRoute(
+                      (cancelToken) => MyApi.getPoetsByPage(
+                        nextPage,
+                        cancelToken: cancelToken,
+                      ),
+                    );
+                    if (poets == null) return;
+                    _vm.page.value = nextPage;
                     _vm.poets.assignAll(poets);
                   },
                 ),
@@ -97,8 +109,15 @@ class PoetsView extends StatelessWidget {
                 _vm.page.value == 47 ? Container() : IconButton(
                   icon: Icon(Icons.arrow_forward_ios, size: 20,),
                   onPressed: () async {
-                    _vm.page.value = _vm.page.value + 1;
-                    final poets = await MyApi.getPoetsByPage(_vm.page.value);
+                    final nextPage = _vm.page.value + 1;
+                    final poets = await runWithLoadingRoute(
+                      (cancelToken) => MyApi.getPoetsByPage(
+                        nextPage,
+                        cancelToken: cancelToken,
+                      ),
+                    );
+                    if (poets == null) return;
+                    _vm.page.value = nextPage;
                     _vm.poets.assignAll(poets);
                   },
                 ),

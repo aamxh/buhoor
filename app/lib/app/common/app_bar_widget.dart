@@ -49,8 +49,8 @@ class AppBarWidget extends StatelessWidget {
               ),
               Image.asset(
                 theme.primaryColor == Colors.white ?
-                'assets/buhoor.png' :
-                'assets/buhoor_dark.jpg',
+                'assets/buhoor_no_bg.png' :
+                'assets/buhoor_dark_no_bg.png',
                 width: size.width * 0.2,
               ),
               Padding(

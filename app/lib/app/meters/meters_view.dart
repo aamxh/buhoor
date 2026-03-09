@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/app/meters/meter_view_model.dart';
 import 'package:buhoor/core/constants.dart';
 import 'package:flutter/material.dart';
@@ -37,9 +38,13 @@ class MetersView extends StatelessWidget {
                     child: GestureDetector(
                       onTap: () async {
                         final meterViewModel = Get.find<MeterViewModel>();
-                        final data = await MyApi.getFilteredPoems(
-                          meter: MyConstants.meters[idx]['slug'].toString(),
+                        final data = await runWithLoadingRoute(
+                          (cancelToken) => MyApi.getFilteredPoems(
+                            meter: MyConstants.meters[idx]['slug'].toString(),
+                            cancelToken: cancelToken,
+                          ),
                         );
+                        if (data == null) return;
                         meterViewModel.meterName.value = MyConstants.meters[idx]['name'].toString();
                         meterViewModel.meterSlug.value = MyConstants.meters[idx]['slug'].toString();
                         meterViewModel.poems.value = data['poems'];

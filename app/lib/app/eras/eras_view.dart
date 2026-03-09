@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/app/eras/era_view.dart';
 import 'package:buhoor/app/eras/era_view_model.dart';
 import 'package:buhoor/core/constants.dart';
@@ -37,9 +38,13 @@ class ErasView extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () async {
                             final eraViewModel = Get.find<EraViewModel>();
-                            final data = await MyApi.getFilteredPoems(
-                              era: MyConstants.eras[idx]['slug'].toString(),
+                            final data = await runWithLoadingRoute(
+                              (cancelToken) => MyApi.getFilteredPoems(
+                                era: MyConstants.eras[idx]['slug'].toString(),
+                                cancelToken: cancelToken,
+                              ),
                             );
+                            if (data == null) return;
                             eraViewModel.eraName.value = MyConstants.eras[idx]['name'].toString();
                             eraViewModel.eraSlug.value = MyConstants.eras[idx]['slug'].toString();
                             eraViewModel.poems.value = data['poems'];

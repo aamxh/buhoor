@@ -1,5 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
+import 'package:buhoor/app/common/loading_route.dart';
 import 'package:buhoor/app/poem/poem_view.dart';
 import 'package:buhoor/app/poem/poem_view_model.dart';
 import 'package:buhoor/core/constants.dart';
@@ -99,11 +100,16 @@ class EraView extends StatelessWidget {
                   _vm.page.value == 1 ? Container() : IconButton(
                     icon: Icon(Icons.arrow_back_ios, size: 20,),
                     onPressed: () async {
-                      _vm.page.value = _vm.page.value - 1;
-                      final data = await MyApi.getFilteredPoems(
-                        page: _vm.page.value,
-                        era: _vm.eraSlug.value,
+                      final nextPage = _vm.page.value - 1;
+                      final data = await runWithLoadingRoute(
+                        (cancelToken) => MyApi.getFilteredPoems(
+                          page: nextPage,
+                          era: _vm.eraSlug.value,
+                          cancelToken: cancelToken,
+                        ),
                       );
+                      if (data == null) return;
+                      _vm.page.value = nextPage;
                       _vm.poems.assignAll(data["poems"]);
                       _vm.totalPages.value = data['totalPages'];
                     },
@@ -115,11 +121,16 @@ class EraView extends StatelessWidget {
                   _vm.page.value == _vm.totalPages.value ? Container() : IconButton(
                     icon: Icon(Icons.arrow_forward_ios, size: 20,),
                     onPressed: () async {
-                      _vm.page.value = _vm.page.value + 1;
-                      final data = await MyApi.getFilteredPoems(
-                        era: _vm.eraSlug.value,
-                        page: _vm.page.value,
+                      final nextPage = _vm.page.value + 1;
+                      final data = await runWithLoadingRoute(
+                        (cancelToken) => MyApi.getFilteredPoems(
+                          era: _vm.eraSlug.value,
+                          page: nextPage,
+                          cancelToken: cancelToken,
+                        ),
                       );
+                      if (data == null) return;
+                      _vm.page.value = nextPage;
                       _vm.poems.value = data['poems'];
                       _vm.totalPages.value = data['totalPages'];
                     },
