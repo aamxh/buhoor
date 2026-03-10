@@ -1,6 +1,6 @@
 import 'package:buhoor/app/common/api.dart';
 import 'package:buhoor/app/common/app_bar_widget.dart';
-import 'package:buhoor/app/common/loading_route.dart';
+import 'package:buhoor/app/common/loading_view.dart';
 import 'package:buhoor/app/meters/meter_view_model.dart';
 import 'package:buhoor/app/poem/poem_view.dart';
 import 'package:buhoor/app/poem/poem_view_model.dart';

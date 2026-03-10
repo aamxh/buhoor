@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:buhoor/app/common/no_connection_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -14,36 +13,43 @@ class _RequestTimeoutException implements Exception {
 const Duration _requestTimeout = Duration(minutes: 1);
 
 const String _noInternetMessage =
-    'No internet connection. Please check your connection and try again.';
+    'لا يوجد اتصال بالإنترنت. يرجى التحقق من اتصالك والمحاولة مرة أخرى.';
 const String _requestTimeoutMessage =
-    'No connection. The request took more than 1 minute. Please retry.';
+    'لا يوجد اتصال. استغرق الطلب أكثر من دقيقة. يرجى المحاولة مرة أخرى.';
 
-class LoadingRouteView extends StatelessWidget {
-  const LoadingRouteView({
+class LoadingView extends StatelessWidget {
+  const LoadingView({
     super.key,
     required this.onCancel,
+    this.canPop = true,
   });
 
   static const routeName = '/loading-route';
 
   final VoidCallback onCancel;
+  final bool canPop;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            onCancel();
-            unawaited(_closeLoadingRoute());
-          },
-        ),
-      ),
-      body: Center(
-        child: CircularProgressIndicator(
-          color: theme.colorScheme.secondary,
+    return PopScope(
+      canPop: canPop,
+      child: Scaffold(
+        appBar: canPop
+            ? AppBar(
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    onCancel();
+                    unawaited(_closeLoadingRoute());
+                  },
+                ),
+              )
+            : null,
+        body: Center(
+          child: CircularProgressIndicator(
+            color: theme.colorScheme.secondary,
+          ),
         ),
       ),
     );
@@ -71,23 +77,27 @@ Future<void> _runSafeNavigation(VoidCallback action) async {
   await completer.future;
 }
 
-Future<bool> _showLoadingRoute(CancelToken cancelToken) async {
+Future<bool> _showLoadingRoute(
+  CancelToken cancelToken, {
+  required bool canPop,
+}) async {
   var shown = false;
   await _runSafeNavigation(() {
-    if (Get.currentRoute == LoadingRouteView.routeName) {
+    if (Get.currentRoute == LoadingView.routeName) {
       return;
     }
     shown = true;
     unawaited(
       Get.to(
-        () => LoadingRouteView(
+        () => LoadingView(
           onCancel: () {
             if (!cancelToken.isCancelled) {
               cancelToken.cancel('cancelled-by-user');
             }
           },
+          canPop: canPop,
         ),
-        routeName: LoadingRouteView.routeName,
+        routeName: LoadingView.routeName,
         preventDuplicates: false,
       ),
     );
@@ -97,7 +107,7 @@ Future<bool> _showLoadingRoute(CancelToken cancelToken) async {
 
 Future<void> _closeLoadingRoute() async {
   await _runSafeNavigation(() {
-    if (Get.currentRoute == LoadingRouteView.routeName) {
+    if (Get.currentRoute == LoadingView.routeName) {
       Get.back();
     }
   });
@@ -107,22 +117,18 @@ Future<bool> _showNoConnectionView(
   String message, {
   required bool canPop,
 }) async {
-  bool retry = false;
+  Future<bool?>? routeResult;
   await _runSafeNavigation(() {
-    unawaited(
-      Get.to(
-        () => NoConnectionView(
-          message: message,
-          canPop: canPop,
-        ),
-        preventDuplicates: false,
-      )!.then((value) {
-        retry = value == true;
-      }),
+    routeResult = Get.to<bool>(
+      () => NoConnectionView(
+        message: message,
+        canPop: canPop,
+      ),
+      preventDuplicates: false,
     );
   });
-  await Future<void>.delayed(const Duration(milliseconds: 16));
-  return retry;
+  final result = await (routeResult ?? Future<bool?>.value(false));
+  return result == true;
 }
 
 Future<bool> _hasInternetConnection() async {
@@ -132,10 +138,14 @@ Future<bool> _hasInternetConnection() async {
 Future<T?> runWithLoadingRoute<T>(
   Future<T> Function(CancelToken cancelToken) request, {
   bool noConnectionCanPop = true,
+  bool loadingCanPop = true,
 }) async {
   while (true) {
     final cancelToken = CancelToken();
-    final loadingShown = await _showLoadingRoute(cancelToken);
+    final loadingShown = await _showLoadingRoute(
+      cancelToken,
+      canPop: loadingCanPop,
+    );
 
     if (cancelToken.isCancelled) {
       if (loadingShown) {

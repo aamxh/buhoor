@@ -16,6 +16,7 @@ class SettingsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Drawer(
+      backgroundColor: theme.scaffoldBackgroundColor,
       child: ListView(
         children: [
           UserAccountsDrawerHeader(

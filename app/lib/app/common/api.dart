@@ -127,13 +127,13 @@ class MyApi {
       );
       if (MyHelpers.isResOk(res.statusCode!)) {
         final data = res.data['results'] as List;
-        data.forEach((e) {
+        for (var e in data) {
           if (e['type'] == 'poems') {
             result['poems']!.add(e['result']);
           } else if (e['type'] == 'poets') {
             result['poets']!.add(e['result']);
           }
-        });
+        }
         return result;
       }
       return result;
