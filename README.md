@@ -4,6 +4,16 @@ Buhoor is an Arabic poetry app with a Flutter client and a Node.js backend.
 
 The app provides poem and poet browsing, filtering, and search over a curated Arabic poetry dataset.
 
+## Android App Screenshots
+
+<p align="left">
+  <img src="screenshots/1.jpg" alt="Screenshot 1" width="250"/>
+  <img src="screenshots/2.jpg" alt="Screenshot 2" width="250"/>
+  <img src="screenshots/3.jpg" alt="Screenshot 2" width="250"/>
+  <img src="screenshots/4.jpg" alt="Screenshot 2" width="250"/>
+  <img src="screenshots/5.jpg" alt="Screenshot 2" width="250"/>
+</p>
+
 ## Project Structure
 
 - `app/`: Flutter mobile application
